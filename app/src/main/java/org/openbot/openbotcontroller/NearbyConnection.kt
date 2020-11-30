@@ -9,6 +9,7 @@ import org.openbot.openbotcontroller.utils.Utils
 import java.nio.charset.StandardCharsets
 
 object NearbyConnection {
+    private const val TAG = "NearbyConnection"
     private val connectionName = "OpenBotConnection"
 
     // Our handle to Nearby Connections
@@ -17,7 +18,6 @@ object NearbyConnection {
     private var pairedDeviceName: String? = null
     private const val SERVICE_ID = "OPENBOT_SERVICE_ID"
 
-    private const val TAG = "NearbyConnection"
     private val STRATEGY = Strategy.P2P_CLUSTER
 
     fun init() {
@@ -106,16 +106,16 @@ object NearbyConnection {
 
     /** Disconnects from the opponent and reset the UI.  */
     fun disconnect() {
+        val event: EventProcessor.ProgressEvents =
+            EventProcessor.ProgressEvents.Disconnecting
+        EventProcessor.onNext(event)
+
         connectionsClient!!.stopAdvertising()
 
         if (pairedDeviceEndpointId != null) {
             connectionsClient!!.disconnectFromEndpoint(pairedDeviceEndpointId!!)
         }
         connectionsClient!!.stopAllEndpoints()
-
-        val event: EventProcessor.ProgressEvents =
-            EventProcessor.ProgressEvents.Disconnecting
-        EventProcessor.onNext(event)
     }
 
     /** Broadcasts our presence using Nearby Connections so the bot can find us  */

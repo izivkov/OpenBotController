@@ -12,10 +12,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import org.openbot.openbotcontroller.utils.EventProcessor
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
 class OpenbotControllerActivity : AppCompatActivity() {
     private val TAG = "OpenbotControllerActivity"
 
