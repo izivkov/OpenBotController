@@ -24,12 +24,13 @@ object NearbyConnection {
     }
 
     // Callbacks for receiving payloads
+    // Currently not used, but can be used to receive gyroscope data, etc. from the bot.
     private val payloadCallback: PayloadCallback = object : PayloadCallback() {
         override fun onPayloadReceived(
             endpointId: String,
             payload: Payload
         ) {
-            val topic = String(
+            val data = String(
                 payload.asBytes()!!,
                 StandardCharsets.UTF_8
             )
@@ -136,7 +137,7 @@ object NearbyConnection {
                 abortConnection()
 
                 val event: EventProcessor.ProgressEvents =
-                    EventProcessor.ProgressEvents.StopAdvertising
+                    EventProcessor.ProgressEvents.AdvertisingFailed
                 EventProcessor.onNext(event)
 
                 Log.d(

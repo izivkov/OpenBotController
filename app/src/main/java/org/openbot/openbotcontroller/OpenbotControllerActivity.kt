@@ -92,6 +92,8 @@ class OpenbotControllerActivity : AppCompatActivity() {
                     }
                     EventProcessor.ProgressEvents.StopAdvertising -> {
                     }
+                    EventProcessor.ProgressEvents.AdvertisingFailed -> {
+                    }
                 }
             }
             .subscribe(
