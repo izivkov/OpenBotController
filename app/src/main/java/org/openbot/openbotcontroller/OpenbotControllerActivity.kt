@@ -35,6 +35,11 @@ class OpenbotControllerActivity : AppCompatActivity() {
                         NearbyConnection.sendMessage("GO")
                         Log.i(TAG, "Go")
                     }
+                    R.id.reconnect -> {
+                        NearbyConnection.disconnect()
+                        NearbyConnection.connect(this)
+                        Log.i(TAG, "Reconnect")
+                    }
                 }
                 view.performClick()
             }
@@ -51,10 +56,10 @@ class OpenbotControllerActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_fullscreen)
 
-        val controlsContainer: LinearLayout =
-            findViewById<LinearLayout>(R.id.fullscreen_content_controls)
+        val controlsContainer: RelativeLayout =
+            findViewById<RelativeLayout>(R.id.fullscreen_content_controls)
 
-        controlsContainer.visibility = View.INVISIBLE;
+        controlsContainer.visibility = View.GONE;
         createAppEventsSubscription()
 
         findViewById<Button>(R.id.left).setOnTouchListener(controlButtonListener)
@@ -62,8 +67,21 @@ class OpenbotControllerActivity : AppCompatActivity() {
         findViewById<Button>(R.id.stop).setOnTouchListener(controlButtonListener)
         findViewById<Button>(R.id.go).setOnTouchListener(controlButtonListener)
 
+        findViewById<Button>(R.id.reconnect).setOnTouchListener(controlButtonListener)
+
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         NearbyConnection.connect(this)
+    }
+
+    private fun hideControlls () {
+        findViewById<RelativeLayout>(R.id.fullscreen_content_controls).visibility =
+            View.GONE
+        findViewById<LinearLayout>(R.id.splash_screen).visibility = View.VISIBLE
+    }
+    private fun showControlls () {
+        findViewById<LinearLayout>(R.id.splash_screen).visibility = View.GONE
+        findViewById<RelativeLayout>(R.id.fullscreen_content_controls).visibility =
+            View.VISIBLE
     }
 
     private fun createAppEventsSubscription(): Disposable =
@@ -74,21 +92,22 @@ class OpenbotControllerActivity : AppCompatActivity() {
 
                 when (it) {
                     EventProcessor.ProgressEvents.ConnectionSuccessful -> {
-                        findViewById<LinearLayout>(R.id.splash_screen).visibility = View.INVISIBLE
-                        findViewById<LinearLayout>(R.id.fullscreen_content_controls).visibility =
-                            View.VISIBLE
+                        showControlls()
+                    }
+                    EventProcessor.ProgressEvents.ConnectionStarted -> {
                     }
                     EventProcessor.ProgressEvents.ConnectionFailed -> {
-                    }
-                    EventProcessor.ProgressEvents.ConnectionFailed -> {
+                        hideControlls()
                     }
                     EventProcessor.ProgressEvents.StartAdvertising -> {
+                        hideControlls()
                     }
                     EventProcessor.ProgressEvents.Disconnecting -> {
                     }
                     EventProcessor.ProgressEvents.StopAdvertising -> {
                     }
                     EventProcessor.ProgressEvents.AdvertisingFailed -> {
+                        hideControlls()
                     }
                 }
             }

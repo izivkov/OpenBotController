@@ -5,5 +5,6 @@
     <string name="Stop">Stop</string>
     <string name="Go">Go</string>
     <string name="searching">Searching for Bot...</string>
+    <string name="reconnect">Search again</string>
 
 </resources>

@@ -18,7 +18,7 @@ object NearbyConnection {
     private var pairedDeviceName: String? = null
     private const val SERVICE_ID = "OPENBOT_SERVICE_ID"
 
-    private val STRATEGY = Strategy.P2P_CLUSTER
+    private val STRATEGY = Strategy.P2P_POINT_TO_POINT
 
     fun init() {
     }

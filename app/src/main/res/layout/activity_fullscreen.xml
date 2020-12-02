@@ -25,10 +25,10 @@
             android:id="@+id/searching"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50sp"
             android:keepScreenOn="true"
             android:text="@string/searching"
             android:textSize="30sp"
-            android:layout_marginTop="50sp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -40,43 +40,65 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
-        <LinearLayout
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/fullscreen_content_controls"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent">
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp" >
 
-            <Button
-                android:id="@+id/left"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/reset_connection"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/Left" />
+                android:layout_alignParentTop="true"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/right"
-                android:layout_width="0dp"
+                <Button
+                    android:id="@+id/reconnect"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/reconnect" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/control_buttons"
+                android:layout_width="match_parent"
+                android:layout_alignParentBottom="true"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/Right" />
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/stop"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/Stop" />
+                <Button
+                    android:id="@+id/left"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/Left" />
 
-            <Button
-                android:id="@+id/go"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/Go" />
+                <Button
+                    android:id="@+id/right"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/Right" />
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/stop"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/Stop" />
+
+                <Button
+                    android:id="@+id/go"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/Go" />
+            </LinearLayout>
+        </RelativeLayout>
     </FrameLayout>
 
 </FrameLayout>

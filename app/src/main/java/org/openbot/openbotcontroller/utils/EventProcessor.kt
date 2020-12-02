@@ -22,6 +22,7 @@ object EventProcessor {
 
         object Init : ProgressEvents()
 
+        object ConnectionStarted:  ProgressEvents()
         object ConnectionSuccessful:  ProgressEvents()
         object ConnectionFailed:  ProgressEvents()
         object StartAdvertising:  ProgressEvents()
