@@ -1,7 +1,20 @@
 <resources>
 
-    <style name="Widget.Theme.OpenBotController.ButtonBar.Fullscreen" parent="">
-        <item name="android:background">@color/light_blue_900</item>
-        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="AppThemeToolbar" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="elevation">0dp</item>
+    </style>
+
 </resources>

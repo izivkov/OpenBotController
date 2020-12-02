@@ -3,13 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/fullscreenBackgroundColor"
-    android:theme="@style/ThemeOverlay.OpenBotController.FullscreenContainer"
     tools:context=".OpenbotControllerActivity">
 
     <LinearLayout
         android:id="@+id/splash_screen"
-        style="@style/Widget.Theme.OpenBotController.ButtonBar.Fullscreen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -21,7 +18,6 @@
             android:layout_height="wrap_content"
             android:keepScreenOn="true"
             android:text="@string/app_name"
-            android:textColor="?attr/fullscreenTextColor"
             android:textSize="50sp"
             android:textStyle="bold" />
 
@@ -31,7 +27,6 @@
             android:layout_height="wrap_content"
             android:keepScreenOn="true"
             android:text="@string/searching"
-            android:textColor="?attr/fullscreenTextColor"
             android:textSize="30sp"
             android:layout_marginTop="50sp"
             android:textStyle="bold" />
@@ -47,7 +42,6 @@
 
         <LinearLayout
             android:id="@+id/fullscreen_content_controls"
-            style="@style/Widget.Theme.OpenBotController.ButtonBar.Fullscreen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
