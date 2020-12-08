@@ -1,23 +1,30 @@
 package org.openbot.openbotcontroller
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.res.Configuration
+import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
-import android.view.WindowManager
-import android.widget.*
+import android.view.*
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import org.openbot.openbotcontroller.customComponents.DualDriveSlider
 import org.openbot.openbotcontroller.customComponents.IDriveValue
 import org.openbot.openbotcontroller.utils.EventProcessor
-
 import kotlin.Float as DrivePositionAsFloatBetweenMinusOneAndOne
 
+
+@Suppress("DEPRECATION")
 class OpenbotControllerActivity : AppCompatActivity() {
     private val TAG = "OpenbotControllerActivity"
+    enum class LeftOrRight { LEFT, RIGHT }
 
     private val controlButtonListener = View.OnTouchListener { view, motionEvent ->
         val any = when (motionEvent.action) {
@@ -57,11 +64,30 @@ class OpenbotControllerActivity : AppCompatActivity() {
         false
     }
 
-    class DriveValue (private val direction: String): IDriveValue {
+    // This class combines, coalesces and throttles signals from the left and right drive DualDriveSlider and sends them to the bot.
+    object DriveCommandEmitter {
+        private var lastTransmitted: Long = System.currentTimeMillis()
+        private const val MIN_TIME_BETWEEN_TRANSMISSIONS = 50 // ms
+        private var lastRightValue = 0f
+        private var lastLeftValue = 0f
+
+        fun controlInput(value: kotlin.Float, leftOrRight: LeftOrRight) {
+            if (leftOrRight == LeftOrRight.LEFT) lastLeftValue = value else lastRightValue = value
+
+            if ((System.currentTimeMillis() - lastTransmitted) >= MIN_TIME_BETWEEN_TRANSMISSIONS) {
+                val msg = "{r:${lastRightValue}, l:${lastLeftValue}}"
+                NearbyConnection.sendMessage(msg)
+                lastTransmitted = System.currentTimeMillis()
+
+                Log.i("", "Sending ${msg}")
+            }
+        }
+    }
+
+    class DriveValue(private val direction: LeftOrRight): IDriveValue {
         override operator fun invoke(x: DrivePositionAsFloatBetweenMinusOneAndOne): DrivePositionAsFloatBetweenMinusOneAndOne {
-            val msg:String
-            if (direction == "RIGHT") msg = "{rightDrive:${x}}" else msg = "{leftDrive:${x}}"
-            NearbyConnection.sendMessage(msg)
+
+            DriveCommandEmitter.controlInput(x, direction)
             return x;
         }
     }
@@ -76,8 +102,6 @@ class OpenbotControllerActivity : AppCompatActivity() {
             findViewById<RelativeLayout>(R.id.fullscreen_content_controls)
 
         controlsContainer.visibility = View.GONE;
-
-        // showControlls()
         createAppEventsSubscription()
 
         findViewById<Button>(R.id.logs).setOnTouchListener(controlButtonListener)
@@ -88,11 +112,39 @@ class OpenbotControllerActivity : AppCompatActivity() {
         findViewById<Button>(R.id.drive_by_network).setOnTouchListener(controlButtonListener)
         findViewById<Button>(R.id.reconnect).setOnTouchListener(controlButtonListener)
 
-        findViewById<DualDriveSlider>(R.id.leftDriveControl).setOnValueChangedListener(DriveValue ("LEFT"))
-        findViewById<DualDriveSlider>(R.id.rightDriveControl).setOnValueChangedListener(DriveValue ("RIGHT"))
+        findViewById<DualDriveSlider>(R.id.leftDriveControl).setOnValueChangedListener(
+            DriveValue(
+                LeftOrRight.LEFT
+            )
+        )
+        findViewById<DualDriveSlider>(R.id.rightDriveControl).setOnValueChangedListener(
+            DriveValue(
+                LeftOrRight.RIGHT
+            )
+        )
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        hideSystemUI()
         NearbyConnection.connect(this)
+    }
+
+    private fun hideSystemUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.let {
+                it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                window.navigationBarColor = getColor(R.color.colorPrimaryDark)
+                it.hide(WindowInsets.Type.systemBars())
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_IMMERSIVE
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+            @Suppress("DEPRECATION")
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+        }
     }
 
     @Override
