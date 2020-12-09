@@ -1,12 +1,8 @@
 package org.openbot.openbotcontroller
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.res.Configuration
-import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.Button
@@ -127,32 +123,6 @@ class OpenbotControllerActivity : AppCompatActivity() {
         NearbyConnection.connect(this)
     }
 
-    private fun hideSystemUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.let {
-                it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                window.navigationBarColor = getColor(R.color.colorPrimaryDark)
-                it.hide(WindowInsets.Type.systemBars())
-            }
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_IMMERSIVE
-                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_FULLSCREEN
-                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-            @Suppress("DEPRECATION")
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
-        }
-    }
-
-    @Override
-    override fun onPause() {
-        super.onPause()
-        NearbyConnection.disconnect()
-    }
-
     private fun hideControls () {
         findViewById<RelativeLayout>(R.id.fullscreen_content_controls).visibility =
             View.GONE
@@ -199,6 +169,38 @@ class OpenbotControllerActivity : AppCompatActivity() {
                         "Got error on subscribe: $throwable"
                     )
                 })
+
+    private fun hideSystemUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.let {
+                it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                window.navigationBarColor = getColor(R.color.colorPrimaryDark)
+                it.hide(WindowInsets.Type.systemBars())
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_IMMERSIVE
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+            @Suppress("DEPRECATION")
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+        }
+    }
+
+    @Override
+    override fun onPause() {
+        super.onPause()
+        // NearbyConnection.disconnect()
+    }
+
+    @Override
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI()
+    }
 
     companion object
 }
