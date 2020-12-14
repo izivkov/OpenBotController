@@ -9,7 +9,8 @@ import android.view.MotionEvent
 class DualDriveSlider : androidx.appcompat.widget.AppCompatSeekBar {
     private lateinit var driveValue: IDriveValue
 
-    constructor(context: Context) : super(context) {}
+    constructor(context: Context) : super(context) {
+    }
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(
         context,
         attrs,
@@ -17,7 +18,9 @@ class DualDriveSlider : androidx.appcompat.widget.AppCompatSeekBar {
     ) {
     }
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {}
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        this.setProgress(50)
+    }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(h, w, oldh, oldw)

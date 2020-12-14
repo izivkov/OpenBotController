@@ -56,7 +56,8 @@
 
                 <org.openbot.openbotcontroller.customComponents.DualDriveSlider
                     android:id="@+id/leftDriveControl"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
+                    android:background="@drawable/sliders_background"
                     android:layout_height="match_parent"
                     android:max="100"
                     android:min="0"/>
@@ -72,7 +73,8 @@
 
             <org.openbot.openbotcontroller.customComponents.DualDriveSlider
                     android:id="@+id/rightDriveControl"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
+                    android:background="@drawable/sliders_background"
                     android:layout_height="match_parent"
                     android:max="100"
                     android:min="0"/>
@@ -88,11 +90,11 @@
                 android:layout_toRightOf="@id/left_slider"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/reconnect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/reconnect" />
+<!--                <Button-->
+<!--                    android:id="@+id/reconnect"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/reconnect" />-->
 
             </LinearLayout>
 

@@ -3,8 +3,13 @@ package org.openbot.openbotcontroller
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.*
+import android.view.MotionEvent.ACTION_DOWN
+import android.view.MotionEvent.ACTION_UP
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -20,6 +25,7 @@ import kotlin.Float as DrivePositionAsFloatBetweenMinusOneAndOne
 @Suppress("DEPRECATION")
 class OpenbotControllerActivity : AppCompatActivity() {
     private val TAG = "OpenbotControllerActivity"
+    private var buttinsVisible: Boolean = false;
     enum class LeftOrRight { LEFT, RIGHT }
 
     private val controlButtonListener = View.OnTouchListener { view, motionEvent ->
@@ -45,11 +51,11 @@ class OpenbotControllerActivity : AppCompatActivity() {
                         NearbyConnection.sendMessage("{buttonValue: DRIVE_BY_NETWORK}")
                         Log.i(TAG, "Stop")
                     }
-                    R.id.reconnect -> {
-                        NearbyConnection.disconnect()
-                        NearbyConnection.connect(this)
-                        Log.i(TAG, "Reconnect")
-                    }
+//                    R.id.reconnect -> {
+//                        NearbyConnection.disconnect()
+//                        NearbyConnection.connect(this)
+//                        Log.i(TAG, "Reconnect")
+//                    }
                 }
                 view.performClick()
             }
@@ -74,8 +80,6 @@ class OpenbotControllerActivity : AppCompatActivity() {
                 val msg = "{r:${lastRightValue}, l:${lastLeftValue}}"
                 NearbyConnection.sendMessage(msg)
                 lastTransmitted = System.currentTimeMillis()
-
-                Log.i("", "Sending ${msg}")
             }
         }
     }
@@ -97,7 +101,6 @@ class OpenbotControllerActivity : AppCompatActivity() {
         val controlsContainer: RelativeLayout =
             findViewById<RelativeLayout>(R.id.fullscreen_content_controls)
 
-        controlsContainer.visibility = View.GONE;
         createAppEventsSubscription()
 
         findViewById<Button>(R.id.logs).setOnTouchListener(controlButtonListener)
@@ -106,7 +109,7 @@ class OpenbotControllerActivity : AppCompatActivity() {
         findViewById<Button>(R.id.indicator_stop).setOnTouchListener(controlButtonListener)
         findViewById<Button>(R.id.noise).setOnTouchListener(controlButtonListener)
         findViewById<Button>(R.id.drive_by_network).setOnTouchListener(controlButtonListener)
-        findViewById<Button>(R.id.reconnect).setOnTouchListener(controlButtonListener)
+        // findViewById<Button>(R.id.reconnect).setOnTouchListener(controlButtonListener)
 
         findViewById<DualDriveSlider>(R.id.leftDriveControl).setOnValueChangedListener(
             DriveValue(
@@ -119,8 +122,67 @@ class OpenbotControllerActivity : AppCompatActivity() {
             )
         )
 
+        findViewById<RelativeLayout>(R.id.fullscreen_content_controls).setOnTouchListener {v: View, m: MotionEvent ->
+            if (m.action == ACTION_UP) {
+                toggleButtons()
+            }
+            true
+        }
+
         hideSystemUI()
+        hideControls ()
+
         NearbyConnection.connect(this)
+    }
+
+    private fun toggleButtons () {
+        if (buttinsVisible) {
+            hideButtons()
+        } else {
+            showButtons()
+        }
+    }
+
+    private fun hideButtons () {
+        findViewById<Button>(R.id.logs).visibility = INVISIBLE
+        findViewById<Button>(R.id.indicator_right).visibility = INVISIBLE
+        findViewById<Button>(R.id.indicator_left).visibility = INVISIBLE
+        findViewById<Button>(R.id.indicator_stop).visibility = INVISIBLE
+        findViewById<Button>(R.id.noise).visibility = INVISIBLE
+        findViewById<Button>(R.id.drive_by_network).visibility = INVISIBLE
+
+        showSliders()
+        buttinsVisible = false;
+    }
+
+    private fun hideSliders () {
+        findViewById<DualDriveSlider>(R.id.leftDriveControl).visibility = INVISIBLE
+        findViewById<DualDriveSlider>(R.id.rightDriveControl).visibility = INVISIBLE
+    }
+
+    private fun showSliders () {
+        findViewById<DualDriveSlider>(R.id.leftDriveControl).visibility = VISIBLE
+        findViewById<DualDriveSlider>(R.id.rightDriveControl).visibility = VISIBLE
+    }
+
+    private fun showButtons (milliseconds: Long) {
+        showButtons ()
+
+        Handler().postDelayed({
+            hideButtons()
+        }, milliseconds)
+    }
+
+    private fun showButtons () {
+        findViewById<Button>(R.id.logs).visibility = VISIBLE
+        findViewById<Button>(R.id.indicator_right).visibility = VISIBLE
+        findViewById<Button>(R.id.indicator_left).visibility = VISIBLE
+        findViewById<Button>(R.id.indicator_stop).visibility = VISIBLE
+        findViewById<Button>(R.id.noise).visibility = VISIBLE
+        findViewById<Button>(R.id.drive_by_network).visibility = VISIBLE
+
+        hideSliders()
+        buttinsVisible = true;
     }
 
     private fun hideControls () {
@@ -132,6 +194,8 @@ class OpenbotControllerActivity : AppCompatActivity() {
         findViewById<LinearLayout>(R.id.splash_screen).visibility = View.GONE
         findViewById<RelativeLayout>(R.id.fullscreen_content_controls).visibility =
             View.VISIBLE
+
+        showButtons(3000)
     }
 
     private fun createAppEventsSubscription(): Disposable =
@@ -180,7 +244,8 @@ class OpenbotControllerActivity : AppCompatActivity() {
         } else {
             @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_IMMERSIVE
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             or View.SYSTEM_UI_FLAG_FULLSCREEN
                             or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -193,7 +258,7 @@ class OpenbotControllerActivity : AppCompatActivity() {
     @Override
     override fun onPause() {
         super.onPause()
-        // NearbyConnection.disconnect()
+        NearbyConnection.disconnect()
     }
 
     @Override
