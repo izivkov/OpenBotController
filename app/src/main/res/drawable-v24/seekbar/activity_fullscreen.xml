@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OpenbotControllerActivity">
+
+    <LinearLayout
+        android:id="@+id/splash_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:keepScreenOn="true"
+            android:text="@string/app_name"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/searching"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50sp"
+            android:keepScreenOn="true"
+            android:text="@string/searching"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <RelativeLayout
+            android:id="@+id/fullscreen_content_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <LinearLayout
+                android:id="@+id/left_slider"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20dp"
+                android:orientation="horizontal">
+
+                <org.openbot.openbotcontroller.customComponents.DualDriveSlider
+                    android:id="@+id/leftDriveControl"
+                    android:layout_width="120dp"
+                    android:background="@drawable/sliders_background"
+                    android:layout_height="match_parent"
+                    android:max="100"
+                    android:progressDrawable="@drawable/seekbar_style"
+                    style="@style/seekbarStyle"
+                    android:thumb="@drawable/custom_thumb"
+                    android:min="0"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/right_slider"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal">
+
+            <org.openbot.openbotcontroller.customComponents.DualDriveSlider
+                    android:id="@+id/rightDriveControl"
+                    android:layout_width="120dp"
+                    android:background="@drawable/sliders_background"
+                    android:layout_height="match_parent"
+                    android:max="100"
+                    android:thumb="@drawable/custom_thumb"
+                    android:progressDrawable="@drawable/seekbar_style"
+                    android:min="0"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/control_buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/logs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    android:text="Logs"
+                    style="@style/buttonStyle"
+                    />
+                <Button
+                    android:id="@+id/indicator_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    android:text="@string/Indicator_right"
+                    style="@style/buttonStyle"
+                    />
+
+                <Button
+                    android:id="@+id/indicator_left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    android:text="@string/Indicator_left"
+                    style="@style/buttonStyle"
+                    />
+
+                <Button
+                    android:id="@+id/indicator_stop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    android:text="@string/Indicator_stop"
+                    style="@style/buttonStyle"
+                    />
+
+                <Button
+                    android:id="@+id/drive_by_network"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    android:text="@string/Drive_by_network"
+                    style="@style/buttonStyle"
+                    />
+
+                <Button
+                    android:id="@+id/noise"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    android:text="@string/Noise"
+                    style="@style/buttonStyle"
+                    />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </FrameLayout>
+
+</FrameLayout>
