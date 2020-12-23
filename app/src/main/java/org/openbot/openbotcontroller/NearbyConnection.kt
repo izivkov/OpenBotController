@@ -91,6 +91,10 @@ object NearbyConnection {
             }
 
             override fun onDisconnected(endpointId: String) {
+                val event: EventProcessor.ProgressEvents =
+                    EventProcessor.ProgressEvents.Disconnected
+                EventProcessor.onNext(event)
+
                 Log.i(
                     NearbyConnection.TAG,
                     "onDisconnected: disconnected from the nearby device"
@@ -110,12 +114,12 @@ object NearbyConnection {
             EventProcessor.ProgressEvents.Disconnecting
         EventProcessor.onNext(event)
 
-        connectionsClient!!.stopAdvertising()
+        connectionsClient?.stopAdvertising()
 
         if (pairedDeviceEndpointId != null) {
-            connectionsClient!!.disconnectFromEndpoint(pairedDeviceEndpointId!!)
+            connectionsClient?.disconnectFromEndpoint(pairedDeviceEndpointId!!)
         }
-        connectionsClient!!.stopAllEndpoints()
+        connectionsClient?.stopAllEndpoints()
     }
 
     /** Broadcasts our presence using Nearby Connections so the bot can find us  */

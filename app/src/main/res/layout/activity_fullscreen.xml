@@ -1,50 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".OpenbotControllerActivity">
 
-    <LinearLayout
+    <org.openbot.openbotcontroller.customComponents.SplashScreenLayout
         android:id="@+id/splash_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:keepScreenOn="true"
-            android:text="@string/app_name"
-            android:textSize="50sp"
-            android:textStyle="bold" />
+        <LinearLayout
+            android:id="@+id/messages_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:translationZ="2dp">
 
-        <TextView
-            android:id="@+id/searching"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50sp"
-            android:keepScreenOn="true"
-            android:text="@string/searching"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/connecting_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Searching for Bot..."
+                android:textSize="32dp"
+                android:layout_marginBottom="20dp"/>
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/hint_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select [Phone Conrol] on the Bot app to connect"
+                android:textSize="24dp" />
+        </LinearLayout>
+
+        <org.openbot.openbotcontroller.customComponents.ExitButton
+            android:id="@+id/exitSplash"
+            style="@style/IconOnlyButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/button"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="30dp"
+            app:icon="@drawable/exit" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/openbot_icon"
+            app:tint="#000066" />
+
+    </org.openbot.openbotcontroller.customComponents.SplashScreenLayout>
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
-    <FrameLayout
+    <org.openbot.openbotcontroller.customComponents.MainFrameLayout
+        android:id="@+id/main_screen"
+        style="@style/mainStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
-        <RelativeLayout
-            android:id="@+id/fullscreen_content_controls"
+        <org.openbot.openbotcontroller.customComponents.DriveModeControlsLayout
+            android:id="@+id/drive_mode_controls"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/left_slider"
@@ -54,13 +80,70 @@
                 android:layout_marginLeft="20dp"
                 android:orientation="horizontal">
 
-                <org.openbot.openbotcontroller.customComponents.DualDriveSlider
+                <org.openbot.openbotcontroller.customComponents.DualDriveSeekBar
                     android:id="@+id/leftDriveControl"
                     android:layout_width="120dp"
-                    android:background="@drawable/sliders_background"
                     android:layout_height="match_parent"
+                    android:background="@drawable/sliders_background"
                     android:max="100"
-                    android:min="0"/>
+                    android:min="1"
+                    android:padding="20dp"
+                    android:progress="50"
+                    android:progressDrawable="@drawable/seekbar_style"
+                    android:thumb="@drawable/custom_thumb" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/top_buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/left_slider"
+                android:orientation="horizontal">
+
+                <org.openbot.openbotcontroller.customComponents.LeftIndicator
+                    android:id="@+id/indicatorLeft"
+                    style="@style/IconOnlyButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/button"
+                    app:icon="@drawable/left_indicator" />
+
+                <org.openbot.openbotcontroller.customComponents.RightIndicator
+                    android:id="@+id/indicatorRight"
+                    style="@style/IconOnlyButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/button"
+                    app:icon="@drawable/right_indicator" />
+
+                <org.openbot.openbotcontroller.customComponents.StopIndicator
+                    android:id="@+id/indicatorStop"
+                    style="@style/IconOnlyButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/button"
+                    app:icon="@drawable/stop_indicator" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bottom_buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_toLeftOf="@+id/right_slider"
+                android:orientation="horizontal">
+
+                <org.openbot.openbotcontroller.customComponents.ExitButton
+                    android:id="@+id/exit"
+                    style="@style/IconOnlyButton"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/button"
+                    app:icon="@drawable/exit" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -71,81 +154,53 @@
                 android:layout_marginRight="20dp"
                 android:orientation="horizontal">
 
-            <org.openbot.openbotcontroller.customComponents.DualDriveSlider
+                <org.openbot.openbotcontroller.customComponents.DualDriveSeekBar
                     android:id="@+id/rightDriveControl"
                     android:layout_width="120dp"
-                    android:background="@drawable/sliders_background"
                     android:layout_height="match_parent"
+                    android:background="@drawable/sliders_background"
                     android:max="100"
-                    android:min="0"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/reset_connection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@id/left_slider"
-                android:orientation="horizontal">
-
-<!--                <Button-->
-<!--                    android:id="@+id/reconnect"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="@string/reconnect" />-->
+                    android:min="1"
+                    android:padding="20dp"
+                    android:progress="50"
+                    android:progressDrawable="@drawable/seekbar_style"
+                    android:thumb="@drawable/custom_thumb" />
 
             </LinearLayout>
+        </org.openbot.openbotcontroller.customComponents.DriveModeControlsLayout>
 
-            <LinearLayout
-                android:id="@+id/control_buttons"
+        <org.openbot.openbotcontroller.customComponents.BotSetupControlsLayout
+            android:id="@+id/bot_setup_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <org.openbot.openbotcontroller.customComponents.LogsButton
+                android:id="@+id/logs"
+                style="@style/buttonStyle"
                 android:layout_width="match_parent"
-                android:layout_alignParentBottom="true"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:background="@drawable/button"
+                android:text="Logs" />
 
-                <Button
-                    android:id="@+id/logs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Logs"
-                    />
-                <Button
-                    android:id="@+id/indicator_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Indicator_right"/>
+            <org.openbot.openbotcontroller.customComponents.NoiseButton
+                android:id="@+id/noise"
+                style="@style/buttonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button"
+                android:text="@string/Noise" />
 
-                <Button
-                    android:id="@+id/indicator_left"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Indicator_left"/>
+            <org.openbot.openbotcontroller.customComponents.DriveModeButton
+                android:id="@+id/drive_mode"
+                style="@style/buttonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button"
+                android:text="@string/Drive_by_network" />
 
-                <Button
-                    android:id="@+id/indicator_stop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Indicator_stop"/>
-
-                <Button
-                    android:id="@+id/drive_by_network"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Drive_by_network"
-                    />
-
-                <Button
-                    android:id="@+id/noise"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Noise"
-                    />
-
-            </LinearLayout>
-        </RelativeLayout>
-    </FrameLayout>
+        </org.openbot.openbotcontroller.customComponents.BotSetupControlsLayout>
+    </org.openbot.openbotcontroller.customComponents.MainFrameLayout>
 
 </FrameLayout>

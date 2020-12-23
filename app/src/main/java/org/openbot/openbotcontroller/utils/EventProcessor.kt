@@ -27,6 +27,7 @@ object EventProcessor {
         object ConnectionFailed:  ProgressEvents()
         object StartAdvertising:  ProgressEvents()
         object Disconnecting:  ProgressEvents()
+        object Disconnected:  ProgressEvents()
         object StopAdvertising: ProgressEvents()
         object AdvertisingFailed: ProgressEvents()
     }

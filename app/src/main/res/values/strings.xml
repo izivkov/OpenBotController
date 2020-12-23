@@ -3,6 +3,7 @@
     <string name="Indicator_right">Right</string>
     <string name="Indicator_left">Left</string>
     <string name="Indicator_stop">Stop</string>
+    <string name="Exit">Exit</string>
     <string name="Noise">Noise</string>
     <string name="Drive_by_network">Drive Mode</string>
     <string name="searching">Searching for Bot...</string>

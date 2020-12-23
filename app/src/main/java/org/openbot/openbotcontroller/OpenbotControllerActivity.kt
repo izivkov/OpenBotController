@@ -5,92 +5,25 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.*
-import android.view.MotionEvent.ACTION_DOWN
-import android.view.MotionEvent.ACTION_UP
+import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
+import android.view.WindowInsets
+import android.view.WindowInsetsController
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import org.openbot.openbotcontroller.customComponents.DualDriveSlider
-import org.openbot.openbotcontroller.customComponents.IDriveValue
+import org.openbot.openbotcontroller.customComponents.*
 import org.openbot.openbotcontroller.utils.EventProcessor
-import kotlin.Float as DrivePositionAsFloatBetweenMinusOneAndOne
-
+import org.openbot.openbotcontroller.utils.Utils
+import kotlinx.android.synthetic.main.activity_fullscreen.*
 
 @Suppress("DEPRECATION")
-class OpenbotControllerActivity : AppCompatActivity() {
+class OpenbotControllerActivity() : AppCompatActivity() {
     private val TAG = "OpenbotControllerActivity"
-    private var buttinsVisible: Boolean = false;
-    enum class LeftOrRight { LEFT, RIGHT }
-
-    private val controlButtonListener = View.OnTouchListener { view, motionEvent ->
-        val any = when (motionEvent.action) {
-            MotionEvent.ACTION_UP -> {
-                when (view.id) {
-                    R.id.logs -> {
-                        NearbyConnection.sendMessage("{buttonValue: LOGS}")
-                    }
-                    R.id.indicator_right -> {
-                        NearbyConnection.sendMessage("{buttonValue: INDICATOR_RIGHT}")
-                    }
-                    R.id.indicator_left -> {
-                        NearbyConnection.sendMessage("{buttonValue: INDICATOR_LEFT}")
-                    }
-                    R.id.indicator_stop -> {
-                        NearbyConnection.sendMessage("{buttonValue: INDICATOR_STOP}")
-                    }
-                    R.id.noise -> {
-                        NearbyConnection.sendMessage("{buttonValue: NOISE}")
-                    }
-                    R.id.drive_by_network -> {
-                        NearbyConnection.sendMessage("{buttonValue: DRIVE_BY_NETWORK}")
-                        Log.i(TAG, "Stop")
-                    }
-//                    R.id.reconnect -> {
-//                        NearbyConnection.disconnect()
-//                        NearbyConnection.connect(this)
-//                        Log.i(TAG, "Reconnect")
-//                    }
-                }
-                view.performClick()
-            }
-
-            else -> {
-            }
-        }
-        false
-    }
-
-    // This class combines, coalesces and throttles signals from the left and right drive DualDriveSlider and sends them to the bot.
-    object DriveCommandEmitter {
-        private var lastTransmitted: Long = System.currentTimeMillis()
-        private const val MIN_TIME_BETWEEN_TRANSMISSIONS = 50 // ms
-        private var lastRightValue = 0f
-        private var lastLeftValue = 0f
-
-        fun controlInput(value: kotlin.Float, leftOrRight: LeftOrRight) {
-            if (leftOrRight == LeftOrRight.LEFT) lastLeftValue = value else lastRightValue = value
-
-            if ((System.currentTimeMillis() - lastTransmitted) >= MIN_TIME_BETWEEN_TRANSMISSIONS) {
-                val msg = "{r:${lastRightValue}, l:${lastLeftValue}}"
-                NearbyConnection.sendMessage(msg)
-                lastTransmitted = System.currentTimeMillis()
-            }
-        }
-    }
-
-    class DriveValue(private val direction: LeftOrRight): IDriveValue {
-        override operator fun invoke(x: DrivePositionAsFloatBetweenMinusOneAndOne): DrivePositionAsFloatBetweenMinusOneAndOne {
-
-            DriveCommandEmitter.controlInput(x, direction)
-            return x;
-        }
-    }
+    private var buttonsVisible: Boolean = false
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,102 +31,70 @@ class OpenbotControllerActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_fullscreen)
 
-        val controlsContainer: RelativeLayout =
-            findViewById<RelativeLayout>(R.id.fullscreen_content_controls)
-
         createAppEventsSubscription()
 
-        findViewById<Button>(R.id.logs).setOnTouchListener(controlButtonListener)
-        findViewById<Button>(R.id.indicator_right).setOnTouchListener(controlButtonListener)
-        findViewById<Button>(R.id.indicator_left).setOnTouchListener(controlButtonListener)
-        findViewById<Button>(R.id.indicator_stop).setOnTouchListener(controlButtonListener)
-        findViewById<Button>(R.id.noise).setOnTouchListener(controlButtonListener)
-        findViewById<Button>(R.id.drive_by_network).setOnTouchListener(controlButtonListener)
-        // findViewById<Button>(R.id.reconnect).setOnTouchListener(controlButtonListener)
+        leftDriveControl.setDirection(DualDriveSeekBar.LeftOrRight.LEFT)
+        rightDriveControl.setDirection(DualDriveSeekBar.LeftOrRight.RIGHT)
 
-        findViewById<DualDriveSlider>(R.id.leftDriveControl).setOnValueChangedListener(
-            DriveValue(
-                LeftOrRight.LEFT
-            )
-        )
-        findViewById<DualDriveSlider>(R.id.rightDriveControl).setOnValueChangedListener(
-            DriveValue(
-                LeftOrRight.RIGHT
-            )
-        )
-
-        findViewById<RelativeLayout>(R.id.fullscreen_content_controls).setOnTouchListener {v: View, m: MotionEvent ->
-            if (m.action == ACTION_UP) {
-                toggleButtons()
-            }
-            true
-        }
+        hideControls ()
+        // showControls()
 
         hideSystemUI()
-        hideControls ()
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
+        main_screen.setupDoubleTap(::toggleButtons)
         NearbyConnection.connect(this)
     }
 
-    private fun toggleButtons () {
-        if (buttinsVisible) {
+    private fun toggleButtons() {
+        if (buttonsVisible) {
             hideButtons()
         } else {
             showButtons()
         }
     }
 
-    private fun hideButtons () {
-        findViewById<Button>(R.id.logs).visibility = INVISIBLE
-        findViewById<Button>(R.id.indicator_right).visibility = INVISIBLE
-        findViewById<Button>(R.id.indicator_left).visibility = INVISIBLE
-        findViewById<Button>(R.id.indicator_stop).visibility = INVISIBLE
-        findViewById<Button>(R.id.noise).visibility = INVISIBLE
-        findViewById<Button>(R.id.drive_by_network).visibility = INVISIBLE
-
+    private fun hideButtons() {
+        // bot_setup_buttons.hide()
+        bot_setup_buttons.visibility = INVISIBLE
         showSliders()
-        buttinsVisible = false;
+        buttonsVisible = false
     }
 
-    private fun hideSliders () {
-        findViewById<DualDriveSlider>(R.id.leftDriveControl).visibility = INVISIBLE
-        findViewById<DualDriveSlider>(R.id.rightDriveControl).visibility = INVISIBLE
+    private fun hideSliders() {
+        // bot_setup_buttons.hide()
+        drive_mode_controls.visibility = INVISIBLE
     }
 
-    private fun showSliders () {
-        findViewById<DualDriveSlider>(R.id.leftDriveControl).visibility = VISIBLE
-        findViewById<DualDriveSlider>(R.id.rightDriveControl).visibility = VISIBLE
+    private fun showSliders() {
+        // drive_mode_controls.show()
+        drive_mode_controls.visibility = VISIBLE
     }
 
-    private fun showButtons (milliseconds: Long) {
-        showButtons ()
+    private fun showButtons(milliseconds: Long) {
+        showButtons()
 
         Handler().postDelayed({
             hideButtons()
         }, milliseconds)
     }
 
-    private fun showButtons () {
-        findViewById<Button>(R.id.logs).visibility = VISIBLE
-        findViewById<Button>(R.id.indicator_right).visibility = VISIBLE
-        findViewById<Button>(R.id.indicator_left).visibility = VISIBLE
-        findViewById<Button>(R.id.indicator_stop).visibility = VISIBLE
-        findViewById<Button>(R.id.noise).visibility = VISIBLE
-        findViewById<Button>(R.id.drive_by_network).visibility = VISIBLE
+    private fun showButtons() {
+        // bot_setup_buttons.show()
+        bot_setup_buttons.visibility = VISIBLE
 
         hideSliders()
-        buttinsVisible = true;
+        buttonsVisible = true
     }
 
-    private fun hideControls () {
-        findViewById<RelativeLayout>(R.id.fullscreen_content_controls).visibility =
-            View.GONE
-        findViewById<LinearLayout>(R.id.splash_screen).visibility = View.VISIBLE
+    private fun hideControls() {
+        main_screen.hide()
+        splash_screen.show()
     }
-    private fun showControlls () {
-        findViewById<LinearLayout>(R.id.splash_screen).visibility = View.GONE
-        findViewById<RelativeLayout>(R.id.fullscreen_content_controls).visibility =
-            View.VISIBLE
+
+    private fun showControls() {
+        splash_screen.hide()
+        main_screen.show()
 
         showButtons(3000)
     }
@@ -206,7 +107,8 @@ class OpenbotControllerActivity : AppCompatActivity() {
 
                 when (it) {
                     EventProcessor.ProgressEvents.ConnectionSuccessful -> {
-                        showControlls()
+                        Utils.beep()
+                        showControls()
                     }
                     EventProcessor.ProgressEvents.ConnectionStarted -> {
                     }
@@ -216,7 +118,9 @@ class OpenbotControllerActivity : AppCompatActivity() {
                     EventProcessor.ProgressEvents.StartAdvertising -> {
                         hideControls()
                     }
-                    EventProcessor.ProgressEvents.Disconnecting -> {
+                    EventProcessor.ProgressEvents.Disconnected -> {
+                        hideControls()
+                        NearbyConnection.connect(this)
                     }
                     EventProcessor.ProgressEvents.StopAdvertising -> {
                     }
