@@ -8,6 +8,6 @@ class LogsButton @JvmOverloads constructor(
 ) : Button(context, attrs, defStyleAttr) {
 
     init {
-        setOnTouchListener(OnTouchListener("{buttonValue: LOGS}"))
+        setOnTouchListener(OnTouchListener("{command: LOGS}"))
     }
 }

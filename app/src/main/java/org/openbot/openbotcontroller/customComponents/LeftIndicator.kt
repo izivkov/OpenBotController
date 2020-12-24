@@ -8,6 +8,6 @@ class LeftIndicator @JvmOverloads constructor(
 ) : Button(context, attrs, defStyleAttr) {
 
     init {
-        setOnTouchListener(OnTouchListener("{buttonValue: INDICATOR_LEFT}"))
+        setOnTouchListener(OnTouchListener("{command: INDICATOR_LEFT}"))
     }
 }

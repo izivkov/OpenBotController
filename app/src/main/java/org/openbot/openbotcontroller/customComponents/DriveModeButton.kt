@@ -8,6 +8,6 @@ class DriveModeButton @JvmOverloads constructor(
 ) : Button(context, attrs, defStyleAttr) {
 
     init {
-        setOnTouchListener(OnTouchListener("{buttonValue: DRIVE_MODE}"))
+        setOnTouchListener(OnTouchListener("{command: DRIVE_MODE}"))
     }
 }

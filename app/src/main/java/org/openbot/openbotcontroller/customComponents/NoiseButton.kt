@@ -8,6 +8,6 @@ class NoiseButton @JvmOverloads constructor(
 ) : Button(context, attrs, defStyleAttr) {
 
     init {
-        setOnTouchListener(OnTouchListener("{buttonValue: NOISE}"))
+        setOnTouchListener(OnTouchListener("{command: NOISE}"))
     }
 }

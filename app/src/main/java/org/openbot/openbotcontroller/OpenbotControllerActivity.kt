@@ -37,13 +37,11 @@ class OpenbotControllerActivity() : AppCompatActivity() {
         rightDriveControl.setDirection(DualDriveSeekBar.LeftOrRight.RIGHT)
 
         hideControls ()
-        // showControls()
 
         hideSystemUI()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
         main_screen.setupDoubleTap(::toggleButtons)
-        NearbyConnection.connect(this)
     }
 
     private fun toggleButtons() {
@@ -169,6 +167,7 @@ class OpenbotControllerActivity() : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         hideSystemUI()
+        NearbyConnection.connect(this)
     }
 
     companion object

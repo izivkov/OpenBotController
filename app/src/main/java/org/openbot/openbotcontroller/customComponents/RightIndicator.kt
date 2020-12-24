@@ -8,6 +8,6 @@ class RightIndicator @JvmOverloads constructor(
 ) : Button(context, attrs, defStyleAttr) {
 
     init {
-        setOnTouchListener(OnTouchListener("{buttonValue: INDICATOR_RIGHT}"))
+        setOnTouchListener(OnTouchListener("{command: INDICATOR_RIGHT}"))
     }
 }

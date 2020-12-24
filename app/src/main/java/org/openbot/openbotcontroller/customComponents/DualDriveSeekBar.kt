@@ -86,7 +86,7 @@ class DualDriveSeekBar @JvmOverloads constructor(
                 value else lastRightValue = value
 
             if ((System.currentTimeMillis() - lastTransmitted) >= MIN_TIME_BETWEEN_TRANSMISSIONS) {
-                val msg = "{r:$lastRightValue, l:$lastLeftValue}"
+                val msg = "{driveCmd: {r:$lastRightValue, l:$lastLeftValue}}"
 
                 Log.i("", "Sending message ${msg}")
 

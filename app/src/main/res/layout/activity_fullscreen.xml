@@ -21,11 +21,11 @@
             android:orientation="vertical"
             android:translationZ="2dp">
 
-            <TextView
+            <org.openbot.openbotcontroller.customComponents.BlinkingTextView
                 android:id="@+id/connecting_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Searching for Bot..."
+                android:text="@string/searching"
                 android:textSize="32dp"
                 android:layout_marginBottom="20dp"/>
 
@@ -33,7 +33,7 @@
                 android:id="@+id/hint_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select [Phone Conrol] on the Bot app to connect"
+                android:text="@string/hint_connect"
                 android:textSize="24dp" />
         </LinearLayout>
 
@@ -192,13 +192,21 @@
                 android:background="@drawable/button"
                 android:text="@string/Noise" />
 
-            <org.openbot.openbotcontroller.customComponents.DriveModeButton
-                android:id="@+id/drive_mode"
+            <org.openbot.openbotcontroller.customComponents.NetworkButton
+                android:id="@+id/network"
                 style="@style/buttonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button"
-                android:text="@string/Drive_by_network" />
+                android:text="@string/Network" />
+
+<!--            <org.openbot.openbotcontroller.customComponents.DriveModeButton-->
+<!--                android:id="@+id/drive_mode"-->
+<!--                style="@style/buttonStyle"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/button"-->
+<!--                android:text="@string/Drive_by_network" />-->
 
         </org.openbot.openbotcontroller.customComponents.BotSetupControlsLayout>
     </org.openbot.openbotcontroller.customComponents.MainFrameLayout>
