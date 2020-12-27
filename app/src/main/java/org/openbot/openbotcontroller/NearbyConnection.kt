@@ -7,8 +7,10 @@ import com.google.android.gms.nearby.connection.*
 import org.openbot.openbotcontroller.utils.EventProcessor
 import org.openbot.openbotcontroller.utils.Utils
 import java.nio.charset.StandardCharsets
+import kotlin.reflect.KProperty0
 
 object NearbyConnection {
+    private lateinit var payloadCallback: PayloadCallback
     private const val TAG = "NearbyConnection"
     private val connectionName = "OpenBotConnection"
 
@@ -23,26 +25,6 @@ object NearbyConnection {
     fun init() {
     }
 
-    // Callbacks for receiving payloads
-    // Currently not used, but can be used to receive gyroscope data, etc. from the bot.
-    private val payloadCallback: PayloadCallback = object : PayloadCallback() {
-        override fun onPayloadReceived(
-            endpointId: String,
-            payload: Payload
-        ) {
-            val data = String(
-                payload.asBytes()!!,
-                StandardCharsets.UTF_8
-            )
-        }
-
-        override fun onPayloadTransferUpdate(
-            endpointId: String,
-            update: PayloadTransferUpdate
-        ) {
-        }
-    }
-
     // Callbacks for connections to other devices
     private val connectionLifecycleCallback: ConnectionLifecycleCallback =
         object : ConnectionLifecycleCallback() {
@@ -51,7 +33,7 @@ object NearbyConnection {
                 connectionInfo: ConnectionInfo
             ) {
                 Log.i(
-                    NearbyConnection.TAG,
+                    TAG,
                     "onConnectionInitiated: accepting connection"
                 )
                 connectionsClient!!.acceptConnection(endpointId, payloadCallback)
@@ -66,7 +48,7 @@ object NearbyConnection {
                     Utils.beep(Utils.TONE.INTERCEPT)
 
                     Log.i(
-                        NearbyConnection.TAG,
+                        TAG,
                         "onConnectionResult: connection successful"
                     )
                     val event: EventProcessor.ProgressEvents =
@@ -84,7 +66,7 @@ object NearbyConnection {
                     EventProcessor.onNext(event)
 
                     Log.i(
-                        NearbyConnection.TAG,
+                        TAG,
                         "onConnectionResult: connection failed"
                     )
                 }
@@ -96,7 +78,7 @@ object NearbyConnection {
                 EventProcessor.onNext(event)
 
                 Log.i(
-                    NearbyConnection.TAG,
+                    TAG,
                     "onDisconnected: disconnected from the nearby device"
                 )
             }
@@ -105,7 +87,7 @@ object NearbyConnection {
     fun connect(context: Context) {
         connectionsClient = Nearby.getConnectionsClient(context)
 
-        startAdvertising(context)
+        startAdvertising()
     }
 
     /** Disconnects from the opponent and reset the UI.  */
@@ -123,7 +105,7 @@ object NearbyConnection {
     }
 
     /** Broadcasts our presence using Nearby Connections so the bot can find us  */
-    private fun startAdvertising(context: Context) {
+    private fun startAdvertising() {
         connectionsClient!!.startAdvertising(
             connectionName, SERVICE_ID, connectionLifecycleCallback,
             AdvertisingOptions.Builder()
@@ -155,7 +137,7 @@ object NearbyConnection {
         disconnect ()
     }
 
-    public fun sendMessage(message: String) {
+    fun sendMessage(message: String) {
         if (connectionsClient == null || pairedDeviceEndpointId == null) {
             Log.d(TAG, "Cannot send...No connection!")
             return
@@ -164,5 +146,9 @@ object NearbyConnection {
             pairedDeviceEndpointId!!,
             Payload.fromBytes(message.toByteArray(StandardCharsets.UTF_8))
         )
+    }
+
+    fun setPayloadCallback(payloadCallback: KProperty0<PayloadCallback>) {
+        this.payloadCallback = payloadCallback.get()
     }
 }

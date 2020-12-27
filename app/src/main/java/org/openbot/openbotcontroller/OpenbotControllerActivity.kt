@@ -41,7 +41,8 @@ class OpenbotControllerActivity() : AppCompatActivity() {
         hideSystemUI()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
-        main_screen.setupDoubleTap(::toggleButtons)
+        mainScreen.setupDoubleTap(::toggleButtons)
+        BotDataListener.init()
     }
 
     private fun toggleButtons() {
@@ -53,20 +54,17 @@ class OpenbotControllerActivity() : AppCompatActivity() {
     }
 
     private fun hideButtons() {
-        // bot_setup_buttons.hide()
-        bot_setup_buttons.visibility = INVISIBLE
+        botSetupButtons.hide()
         showSliders()
         buttonsVisible = false
     }
 
     private fun hideSliders() {
-        // bot_setup_buttons.hide()
-        drive_mode_controls.visibility = INVISIBLE
+        driveModeControls.hide()
     }
 
     private fun showSliders() {
-        // drive_mode_controls.show()
-        drive_mode_controls.visibility = VISIBLE
+        driveModeControls.show()
     }
 
     private fun showButtons(milliseconds: Long) {
@@ -78,21 +76,20 @@ class OpenbotControllerActivity() : AppCompatActivity() {
     }
 
     private fun showButtons() {
-        // bot_setup_buttons.show()
-        bot_setup_buttons.visibility = VISIBLE
+        botSetupButtons.show()
 
         hideSliders()
         buttonsVisible = true
     }
 
     private fun hideControls() {
-        main_screen.hide()
-        splash_screen.show()
+        mainScreen.hide()
+        splashScreen.show()
     }
 
     private fun showControls() {
-        splash_screen.hide()
-        main_screen.show()
+        splashScreen.hide()
+        mainScreen.show()
 
         showButtons(3000)
     }

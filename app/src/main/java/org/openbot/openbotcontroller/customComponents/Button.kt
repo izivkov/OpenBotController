@@ -1,14 +1,22 @@
 package org.openbot.openbotcontroller.customComponents
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import org.openbot.openbotcontroller.NearbyConnection
+import org.openbot.openbotcontroller.StatusEventBus
 
 open class Button @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : com.google.android.material.button.MaterialButton(context, attrs, defStyleAttr) {
+
+    init {
+    }
 
     fun show() {
         visibility = VISIBLE
@@ -29,7 +37,34 @@ open class Button @JvmOverloads constructor(
                     sendMessage(command)
                 }
             }
+            performClick()
             return false
         }
+    }
+
+    @SuppressLint("CheckResult")
+    protected fun subscribe(subject: String, onDataReceived: (String) -> Unit) {
+        StatusEventBus.addSubject(subject)
+        StatusEventBus.getProcessor(subject)?.subscribe {
+            onDataReceived (it as String)
+        }
+    }
+
+    protected fun setOnOffStates (value:String) {
+        if (value == "true") {
+            setToOnState()
+        } else {
+            setToOffState()
+        }
+    }
+
+    protected open fun setToOffState () {
+        backgroundTintList = ColorStateList.valueOf(Color.rgb(53,53,53)) // darkslategray
+        setTextColor(Color.rgb(189,189,189)) // silver
+    }
+
+    protected open fun setToOnState () {
+        backgroundTintList = ColorStateList.valueOf(Color.rgb(128,203,196)) // mediumaquamarine
+        setTextColor(Color.rgb(33,33,33)) // black
     }
 }
