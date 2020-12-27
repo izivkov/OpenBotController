@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import org.openbot.openbotcontroller.NearbyConnection
@@ -30,7 +29,7 @@ open class Button @JvmOverloads constructor(
         NearbyConnection.sendMessage(message)
     }
 
-    inner class OnTouchListener(private val command:String) : View.OnTouchListener {
+    inner class OnTouchListener(private val command: String) : View.OnTouchListener {
         override fun onTouch(v: View?, event: MotionEvent?): Boolean {
             when (event?.action) {
                 MotionEvent.ACTION_UP -> {
@@ -46,11 +45,11 @@ open class Button @JvmOverloads constructor(
     protected fun subscribe(subject: String, onDataReceived: (String) -> Unit) {
         StatusEventBus.addSubject(subject)
         StatusEventBus.getProcessor(subject)?.subscribe {
-            onDataReceived (it as String)
+            onDataReceived(it as String)
         }
     }
 
-    protected fun setOnOffStates (value:String) {
+    protected fun setOnOffStates(value: String) {
         if (value == "true") {
             setToOnState()
         } else {
@@ -58,13 +57,13 @@ open class Button @JvmOverloads constructor(
         }
     }
 
-    protected open fun setToOffState () {
-        backgroundTintList = ColorStateList.valueOf(Color.rgb(53,53,53)) // darkslategray
-        setTextColor(Color.rgb(189,189,189)) // silver
+    protected open fun setToOffState() {
+        backgroundTintList = ColorStateList.valueOf(Color.rgb(53, 53, 53)) // darkslategray
+        setTextColor(Color.rgb(189, 189, 189)) // silver
     }
 
-    protected open fun setToOnState () {
-        backgroundTintList = ColorStateList.valueOf(Color.rgb(128,203,196)) // mediumaquamarine
-        setTextColor(Color.rgb(33,33,33)) // black
+    protected open fun setToOnState() {
+        backgroundTintList = ColorStateList.valueOf(Color.rgb(128, 203, 196)) // mediumaquamarine
+        setTextColor(Color.rgb(33, 33, 33)) // black
     }
 }

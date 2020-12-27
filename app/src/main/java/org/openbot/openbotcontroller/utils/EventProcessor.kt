@@ -22,13 +22,13 @@ object EventProcessor {
 
         object Init : ProgressEvents()
 
-        object ConnectionStarted:  ProgressEvents()
-        object ConnectionSuccessful:  ProgressEvents()
-        object ConnectionFailed:  ProgressEvents()
-        object StartAdvertising:  ProgressEvents()
-        object Disconnecting:  ProgressEvents()
-        object Disconnected:  ProgressEvents()
-        object StopAdvertising: ProgressEvents()
-        object AdvertisingFailed: ProgressEvents()
+        object ConnectionStarted : ProgressEvents()
+        object ConnectionSuccessful : ProgressEvents()
+        object ConnectionFailed : ProgressEvents()
+        object StartAdvertising : ProgressEvents()
+        object Disconnecting : ProgressEvents()
+        object Disconnected : ProgressEvents()
+        object StopAdvertising : ProgressEvents()
+        object AdvertisingFailed : ProgressEvents()
     }
 }

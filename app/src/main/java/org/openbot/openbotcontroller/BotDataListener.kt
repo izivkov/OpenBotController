@@ -16,16 +16,19 @@ object BotDataListener {
     fun init() {
         NearbyConnection.setPayloadCallback(::payloadCallback)
     }
+
     // Callbacks for receiving payloads. The NearbyConnection will call this upon receiving new data.
     private val payloadCallback: PayloadCallback = object : PayloadCallback() {
         override fun onPayloadReceived(
             endpointId: String,
             payload: Payload
         ) {
-            val dataJson = JSONObject(String(
-                payload.asBytes()!!,
-                StandardCharsets.UTF_8
-            ))
+            val dataJson = JSONObject(
+                String(
+                    payload.asBytes()!!,
+                    StandardCharsets.UTF_8
+                )
+            )
             val statusValues = dataJson.getJSONObject("status")
 
             for (key in statusValues.keys()) {

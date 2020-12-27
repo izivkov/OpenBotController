@@ -3,7 +3,6 @@ package org.openbot.openbotcontroller.customComponents
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import org.openbot.openbotcontroller.NearbyConnection
 
@@ -11,14 +10,15 @@ class DualDriveSeekBar @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : androidx.appcompat.widget.AppCompatSeekBar(context, attrs, defStyleAttr) {
 
-    interface IDriveValue: (Float) -> Float {
+    interface IDriveValue : (Float) -> Float {
         override operator fun invoke(x: Float): Float
     }
 
     private lateinit var driveValue: IDriveValue
-    public enum class LeftOrRight { LEFT, RIGHT }
 
-    public fun setDirection(direction: LeftOrRight) {
+    enum class LeftOrRight { LEFT, RIGHT }
+
+    fun setDirection(direction: LeftOrRight) {
         setOnValueChangedListener(DriveValue(direction))
     }
 
@@ -66,10 +66,16 @@ class DualDriveSeekBar @JvmOverloads constructor(
             MotionEvent.ACTION_CANCEL -> {
             }
         }
+        performClick()
         return true
     }
 
-    private fun resetToHomePosition () {
+    override fun performClick(): Boolean {
+        super.performClick()
+        return true
+    }
+
+    private fun resetToHomePosition() {
         this.progress = 50
     }
 
@@ -81,15 +87,11 @@ class DualDriveSeekBar @JvmOverloads constructor(
         private var lastRightValue = 0f
         private var lastLeftValue = 0f
 
-        fun controlInput(value: kotlin.Float, leftOrRight: DualDriveSeekBar.LeftOrRight) {
-            if (leftOrRight == DualDriveSeekBar.LeftOrRight.LEFT) lastLeftValue =
-                value else lastRightValue = value
+        fun controlInput(value: Float, leftOrRight: LeftOrRight) {
+            if (leftOrRight == LeftOrRight.LEFT) lastLeftValue = value else lastRightValue = value
 
             if ((System.currentTimeMillis() - lastTransmitted) >= MIN_TIME_BETWEEN_TRANSMISSIONS) {
                 val msg = "{driveCmd: {r:$lastRightValue, l:$lastLeftValue}}"
-
-                Log.i("", "Sending message ${msg}")
-
                 NearbyConnection.sendMessage(msg)
                 lastTransmitted = System.currentTimeMillis()
             }

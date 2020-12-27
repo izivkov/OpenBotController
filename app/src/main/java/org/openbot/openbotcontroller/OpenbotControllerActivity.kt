@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
@@ -15,13 +13,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import org.openbot.openbotcontroller.customComponents.*
+import kotlinx.android.synthetic.main.activity_fullscreen.*
+import org.openbot.openbotcontroller.customComponents.DualDriveSeekBar
 import org.openbot.openbotcontroller.utils.EventProcessor
 import org.openbot.openbotcontroller.utils.Utils
-import kotlinx.android.synthetic.main.activity_fullscreen.*
 
 @Suppress("DEPRECATION")
-class OpenbotControllerActivity() : AppCompatActivity() {
+class OpenbotControllerActivity : AppCompatActivity() {
     private val TAG = "OpenbotControllerActivity"
     private var buttonsVisible: Boolean = false
 
@@ -36,7 +34,7 @@ class OpenbotControllerActivity() : AppCompatActivity() {
         leftDriveControl.setDirection(DualDriveSeekBar.LeftOrRight.LEFT)
         rightDriveControl.setDirection(DualDriveSeekBar.LeftOrRight.RIGHT)
 
-        hideControls ()
+        hideControls()
 
         hideSystemUI()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

@@ -2,13 +2,10 @@ package org.openbot.openbotcontroller.customComponents
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.MotionEvent
-import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import org.openbot.openbotcontroller.NearbyConnection
 
-open class BlinkingTextView @JvmOverloads constructor(
+class BlinkingTextView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : com.google.android.material.textview.MaterialTextView(context, attrs, defStyleAttr) {
 
@@ -22,6 +19,7 @@ open class BlinkingTextView @JvmOverloads constructor(
 
         startAnimation(anim)
     }
+
     fun show() {
         visibility = VISIBLE
     }

@@ -2,7 +2,6 @@ package org.openbot.openbotcontroller.customComponents
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import org.openbot.openbotcontroller.R
 
 class LeftIndicator @JvmOverloads constructor(
@@ -14,17 +13,16 @@ class LeftIndicator @JvmOverloads constructor(
         subscribe("INDICATOR_LEFT", ::onDataReceived)
     }
 
-    private fun onDataReceived (data:String) {
-        Log.i(null, "LeftIndicator received: $data")
-        setOnOffStates (data)
+    private fun onDataReceived(data: String) {
+        setOnOffStates(data)
     }
 
-    override fun setToOffState () {
+    override fun setToOffState() {
         clearAnimation()
         setIconTintResource(R.color.colorPrimary)
     }
 
-    override fun setToOnState () {
+    override fun setToOnState() {
         setIconTintResource(R.color.green)
         startAnimation(BlinkerAnimation().animation)
     }

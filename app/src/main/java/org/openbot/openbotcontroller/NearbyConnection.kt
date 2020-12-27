@@ -134,7 +134,7 @@ object NearbyConnection {
     }
 
     private fun abortConnection() {
-        disconnect ()
+        disconnect()
     }
 
     fun sendMessage(message: String) {

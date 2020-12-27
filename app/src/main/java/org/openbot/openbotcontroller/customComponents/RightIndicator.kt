@@ -1,12 +1,7 @@
 package org.openbot.openbotcontroller.customComponents
 
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.util.AttributeSet
-import android.util.Log
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import org.openbot.openbotcontroller.R
 
 class RightIndicator @JvmOverloads constructor(
@@ -18,17 +13,16 @@ class RightIndicator @JvmOverloads constructor(
         subscribe("INDICATOR_RIGHT", ::onDataReceived)
     }
 
-    private fun onDataReceived (data:String) {
-        Log.i(null, "RightIndicator received: $data")
-        setOnOffStates (data)
+    private fun onDataReceived(data: String) {
+        setOnOffStates(data)
     }
 
-     override fun setToOffState () {
+    override fun setToOffState() {
         clearAnimation()
         setIconTintResource(R.color.colorPrimary)
     }
 
-    override fun setToOnState () {
+    override fun setToOnState() {
         setIconTintResource(R.color.green)
         startAnimation(BlinkerAnimation().animation)
     }
