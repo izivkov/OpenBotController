@@ -1,3 +1,12 @@
+/*
+ * Developed for the OpenBot project (https://openbot.org) by:
+ *
+ * Ivo Zivkov
+ * izivkov@gmail.com
+ *
+ * Date: 2020-12-27, 10:58 p.m.
+ */
+
 package org.openbot.openbotcontroller
 
 import android.util.Log
