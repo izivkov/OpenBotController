@@ -12,7 +12,7 @@ package org.openbot.openbotcontroller
 import io.reactivex.subjects.PublishSubject
 
 object StatusEventBus {
-    private val subjects: HashMap<String, PublishSubject<String?>> = HashMap()
+    private val subjects = HashMap<String, PublishSubject<String?>>()
 
     fun addSubject(name: String) {
         val subject: PublishSubject<String?> = PublishSubject.create()

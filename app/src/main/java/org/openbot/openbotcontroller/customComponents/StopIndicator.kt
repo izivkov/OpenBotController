@@ -24,7 +24,6 @@ class StopIndicator @JvmOverloads constructor(
     }
 
     private fun onDataReceived(data: String) {
-        Log.i(null, "StopIndicator received: $data")
         setOnOffStates(data)
     }
 
