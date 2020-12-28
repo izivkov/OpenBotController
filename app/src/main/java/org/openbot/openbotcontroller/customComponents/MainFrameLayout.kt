@@ -39,7 +39,6 @@ class MainFrameLayout @JvmOverloads constructor(
 
         setOnTouchListener { v: View, m: MotionEvent ->
             gestureDetector.onTouchEvent(m)
-            performClick()
             true
         }
     }

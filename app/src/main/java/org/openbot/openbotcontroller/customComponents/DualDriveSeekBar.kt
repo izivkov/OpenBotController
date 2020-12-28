@@ -74,12 +74,6 @@ class DualDriveSeekBar @JvmOverloads constructor(
             MotionEvent.ACTION_CANCEL -> {
             }
         }
-        performClick()
-        return true
-    }
-
-    override fun performClick(): Boolean {
-        super.performClick()
         return true
     }
 

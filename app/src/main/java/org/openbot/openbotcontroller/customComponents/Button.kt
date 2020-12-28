@@ -45,7 +45,6 @@ open class Button @JvmOverloads constructor(
                     sendMessage(command)
                 }
             }
-            performClick()
             return false
         }
     }

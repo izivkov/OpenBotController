@@ -29,8 +29,6 @@ class ExitButton @JvmOverloads constructor(
             NearbyConnection.disconnect()
             (context as Activity).finish()
             System.exit(0)
-
-            performClick()
             return true
         }
     }
