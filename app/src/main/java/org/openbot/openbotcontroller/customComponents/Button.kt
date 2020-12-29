@@ -57,20 +57,16 @@ open class Button @JvmOverloads constructor(
         }
     }
 
-    protected fun setOnOffStates(value: String) {
-        if (value == "true") {
-            setToOnState()
-        } else {
-            setToOffState()
-        }
+    protected fun setOnOffStateConditions(value: String) {
+        if (value == "true") onState() else offState()
     }
 
-    protected open fun setToOffState() {
+    protected open fun offState() {
         backgroundTintList = ColorStateList.valueOf(Color.rgb(53, 53, 53)) // darkslategray
         setTextColor(Color.rgb(189, 189, 189)) // silver
     }
 
-    protected open fun setToOnState() {
+    protected open fun onState() {
         backgroundTintList = ColorStateList.valueOf(Color.rgb(128, 203, 196)) // mediumaquamarine
         setTextColor(Color.rgb(33, 33, 33)) // black
     }

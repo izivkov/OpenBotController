@@ -11,7 +11,6 @@ package org.openbot.openbotcontroller.customComponents
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import org.openbot.openbotcontroller.R
 
 class StopIndicator @JvmOverloads constructor(
@@ -24,14 +23,14 @@ class StopIndicator @JvmOverloads constructor(
     }
 
     private fun onDataReceived(data: String) {
-        setOnOffStates(data)
+        setOnOffStateConditions(data)
     }
 
-    override fun setToOffState() {
+    override fun offState() {
         setIconTintResource(R.color.red)
     }
 
-    override fun setToOnState() {
+    override fun onState() {
         setIconTintResource(R.color.colorPrimary)
     }
 }

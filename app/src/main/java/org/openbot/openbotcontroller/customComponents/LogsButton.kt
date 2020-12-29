@@ -22,6 +22,6 @@ class LogsButton @JvmOverloads constructor(
     }
 
     private fun onDataReceived(data: String) {
-        setOnOffStates(data)
+        setOnOffStateConditions(data)
     }
 }

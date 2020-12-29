@@ -23,15 +23,15 @@ class RightIndicator @JvmOverloads constructor(
     }
 
     private fun onDataReceived(data: String) {
-        setOnOffStates(data)
+        setOnOffStateConditions(data)
     }
 
-    override fun setToOffState() {
+    override fun offState() {
         clearAnimation()
         setIconTintResource(R.color.colorPrimary)
     }
 
-    override fun setToOnState() {
+    override fun onState() {
         setIconTintResource(R.color.green)
         startAnimation(BlinkerAnimation().animation)
     }

@@ -19,10 +19,10 @@ class NoiseButton @JvmOverloads constructor(
     init {
         setOnTouchListener(OnTouchListener("{command: NOISE}"))
         subscribe("NOISE", ::onDataReceived)
-        setToOffState()
+        offState()
     }
 
     private fun onDataReceived(data: String) {
-        setOnOffStates(data)
+        setOnOffStateConditions(data)
     }
 }

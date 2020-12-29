@@ -19,10 +19,10 @@ class NetworkButton @JvmOverloads constructor(
     init {
         setOnTouchListener(OnTouchListener("{command: NETWORK}"))
         subscribe("NETWORK", ::onDataReceived)
-        setToOffState()
+        offState()
     }
 
     private fun onDataReceived(data: String) {
-        setOnOffStates(data)
+        setOnOffStateConditions(data)
     }
 }
