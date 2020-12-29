@@ -42,11 +42,12 @@ object BotDataListener {
 
             for (key in statusValues.keys()) {
                 val value: String = statusValues.getString(key)
-                Log.i(null, key)
 
-                // Send an event on a particular subject.
-                // The custom controls are listening on their subject.
-                StatusEventBus.emitEvent(value, key)
+                /*
+                Send an event on a particular subject.
+                The custom components are listening on their subject.
+                */
+                StatusEventBus.emitEvent(key, value)
             }
         }
 

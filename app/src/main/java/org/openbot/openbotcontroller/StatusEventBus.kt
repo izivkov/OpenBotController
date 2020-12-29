@@ -23,7 +23,7 @@ object StatusEventBus {
         return subjects[name]
     }
 
-    fun emitEvent(event: String, name: String) {
+    fun emitEvent(name: String, event: String) {
         subjects[name]?.onNext(event)
     }
 }
