@@ -38,15 +38,16 @@ class OpenbotControllerActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_fullscreen)
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         createAppEventsSubscription()
 
         leftDriveControl.setDirection(DualDriveSeekBar.LeftOrRight.LEFT)
         rightDriveControl.setDirection(DualDriveSeekBar.LeftOrRight.RIGHT)
 
         hideControls()
-
         hideSystemUI()
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
         mainScreen.setupDoubleTap(::toggleButtons)
         BotDataListener.init()
@@ -135,7 +136,7 @@ class OpenbotControllerActivity : AppCompatActivity() {
                 { },
                 { throwable ->
                     Log.d(
-                        "createAppEventsSubscription",
+                        "EventsSubscription",
                         "Got error on subscribe: $throwable"
                     )
                 })
